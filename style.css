@@ -1,0 +1,922 @@
+/* --- Global Styles & Resets --- */
+:root {
+    /* White & Purple Palette */
+    --bg-primary: #ffffff; /* White background */
+    --bg-secondary: #f8f7ff; /* Very light purple/off-white for sidebar/elements */
+    --text-primary: #2e2e2e; /* Dark grey for primary text */
+    --text-secondary: #6a5acd; /* SlateBlue for secondary text/headings */
+    --accent-purple-dark: #6a5acd; /* SlateBlue */
+    --accent-purple-medium: #9370db; /* MediumPurple */
+    --accent-purple-light: #e6e6fa; /* Lavender (for subtle backgrounds/hovers) */
+    --border-color: #dcdcdc; /* Gainsboro - light grey border */
+    --success-color: #3cb371; /* MediumSeaGreen */
+    --error-color: #dc143c; /* Crimson */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-primary); /* White background */
+    color: var(--text-primary); /* Dark text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* --- Authentication Container (Full Screen) --- */
+#auth-container {
+    background-color: var(--bg-primary); /* White background */
+    padding: 40px;
+    width: 100vw;
+    height: 100vh;
+    display: flex; /* Default display, JS hides/shows */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#auth-container {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 70%); /* Subtle gradient */
+    padding: 50px; /* Increased padding */
+}
+
+#auth-container h2 {
+    margin-bottom: 30px;
+    color: var(--accent-purple-dark); /* Purple title */
+    font-size: 3.0rem; /* Larger title */
+    font-weight: 700; /* Bolder */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15); /* Subtle shadow */
+    font-family: 'Arial Black', Gadget, sans-serif; /* More modern font */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Limit the width of the form itself within the full-screen container */
+.auth-form {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 360px; /* Limit form width for readability */
+}
+
+.auth-form h3 {
+    margin-bottom: 20px;
+    color: var(--text-secondary); /* Purple secondary */
+    font-weight: 600;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color); /* Light grey border */
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: var(--bg-primary); /* White background */
+    color: var(--text-primary); /* Dark text */
+}
+
+.auth-form input::placeholder {
+    color: #aaa; /* Lighter grey placeholder */
+}
+
+.auth-form button[type="submit"] {
+    padding: 12px 25px;
+    background-color: var(--accent-purple-dark); /* Purple button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.auth-form button[type="submit"]:hover {
+    background-color: var(--accent-purple-medium); /* Medium purple on hover */
+}
+
+.auth-switch {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--text-primary); /* Dark text */
+}
+
+.auth-switch a {
+    color: var(--accent-purple-dark); /* Purple link */
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+    color: var(--accent-purple-medium);
+}
+
+/* Use the specific class for auth errors */
+#auth-error {
+    color: var(--error-color);
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: none; /* Hidden by default, shown by JS */
+    max-width: 360px; /* Match form width */
+}
+
+
+/* --- Main Application Layout (Sidebar + Main Content) --- */
+#app-layout {
+    display: none; /* Default to hidden, JS shows it */
+    flex-direction: row; /* Ensure flex direction is row for sidebar/main split */
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-primary); /* White background */
+}
+
+/* --- Sidebar (Approx 35%) --- */
+#sidebar {
+    flex: 0 0 35%; /* Sidebar width */
+    max-width: 450px;
+    min-width: 300px;
+    background-color: var(--bg-secondary); /* Light purple/off-white */
+    border-right: 1px solid var(--border-color); /* Light grey border */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto; /* RESTORED scroll */
+}
+
+#profile-section {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary); /* Dark text */
+}
+
+/* Shared heading style for sidebar sections */
+#profile-section h4,
+#chat-list-section h4,
+#add-friend-section h4,
+#pending-requests-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-secondary); /* Purple secondary text */
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+#profile-section #display-username {
+    margin: 5px 0 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary); /* Dark text */
+}
+
+#logout-btn {
+    width: 100%;
+    padding: 8px 12px;
+    margin-top: 10px;
+    background-color: var(--accent-purple-light); /* Light lavender bg */
+    color: var(--accent-purple-dark); /* Dark purple text */
+    border: 1px solid var(--accent-purple-medium); /* Medium purple border */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+#logout-btn:hover {
+    background-color: var(--accent-purple-medium); /* Medium purple bg */
+    color: var(--bg-primary); /* White text */
+    border-color: var(--accent-purple-dark);
+}
+
+#chat-list-section {
+    flex-grow: 1; /* Take remaining space in sidebar */
+    margin-bottom: 15px; /* Space before add friend */
+}
+
+#chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#chat-list li a {
+    display: block;
+    padding: 10px 12px;
+    margin-bottom: 2px;
+    color: var(--text-primary); /* Dark text for inactive */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#chat-list li a:hover {
+    background-color: var(--accent-purple-light); /* Lavender bg on hover */
+    color: var(--accent-purple-dark); /* Dark purple text */
+}
+
+#chat-list li a.active {
+    background-color: var(--accent-purple-dark); /* Dark purple background */
+    color: var(--bg-primary); /* White text */
+    font-weight: 600;
+}
+
+/* --- Main Content Area (Approx 65%) --- */
+#main-content {
+    flex: 1 1 65%; /* Adjusted width */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--bg-primary); /* White background */
+}
+
+#chat-header {
+    padding: 15px 25px; /* More horizontal padding */
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-primary); /* White background */
+    flex-shrink: 0;
+}
+
+#chat-header #chat-title {
+    margin: 0;
+    font-size: 1.3rem; /* Larger title */
+    font-weight: 600;
+    color: var(--text-primary); /* Dark text */
+}
+
+#chat-box {
+    flex-grow: 1;
+    overflow-y: auto; /* Keep scroll for messages */
+    padding: 20px 25px; /* Match header padding */
+    background-color: var(--bg-primary); /* White background */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Messages --- */
+.message {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.45;
+    font-size: 0.95rem;
+}
+
+.message .message-meta {
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--text-secondary); /* Purple secondary */
+    margin-bottom: 4px;
+    display: block;
+}
+
+.message .text {
+    color: var(--text-primary); /* Dark text */
+}
+
+.my-message {
+    background-color: var(--accent-purple-dark); /* Dark purple background */
+    color: var(--bg-primary); /* White text */
+    margin-left: auto;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+}
+.my-message .message-meta {
+    color: rgba(255, 255, 255, 0.8); /* Lighter meta on dark bg */
+}
+.my-message .text {
+    color: var(--bg-primary); /* Ensure text is white */
+}
+
+
+.other-message {
+    background-color: var(--bg-secondary); /* Light purple/off-white background */
+    color: var(--text-primary); /* Dark text */
+    margin-right: auto;
+    align-self: flex-start;
+    border: 1px solid var(--border-color); /* Add subtle border */
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top-left-radius: 12px;
+}
+.other-message .message-meta {
+    color: var(--accent-purple-dark); /* Dark purple meta */
+}
+/* Text color is already dark via .message .text */
+
+/* --- Message Avatars (for all messages) --- */
+.message-avatar-container {
+    position: relative;
+    margin-right: 10px; /* Space for other messages */
+    margin-left: 10px; /* Space for own messages */
+    align-self: flex-start;
+}
+
+.my-message .message-avatar-container {
+    order: 1; /* Push avatar to the right for my messages */
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+.other-message .message-avatar-container {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.message-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px; /* Space between avatar and content */
+    align-self: flex-start; /* Align avatar to the top of the message */
+    cursor: pointer; /* Indicate it's clickable */
+    border: 1px solid var(--border-color);
+    display: block; /* Remove extra space below img */
+}
+
+.message-avatar-status-dot {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 10px;  /* Slightly smaller for avatar */
+    height: 10px; /* Slightly smaller for avatar */
+    border: 1.5px solid var(--bg-primary); /* Border to make it pop from avatar */
+    /* Uses existing .status-dot colors */
+}
+
+/* Adjust message content container layout */
+.message-content-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.my-message .message-content-container {
+    align-items: flex-end;
+}
+
+.other-message .message-content-container {
+    align-items: flex-start;
+}
+
+
+/* --- Message Reactions --- */
+.message {
+    position: relative; /* Needed for absolute positioning of reaction button */
+    /* display: flex; is already on .message, ensure it works with new avatar structure */
+}
+
+.my-message {
+    /* ... existing my-message styles ... */
+    flex-direction: row-reverse; /* Content first, then avatar container */
+}
+.other-message {
+    /* ... existing other-message styles ... */
+    flex-direction: row; /* Avatar container first, then content */
+}
+
+.add-reaction-btn {
+    position: absolute;
+    top: -10px; /* Position slightly above the message */
+    right: 10px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    padding: 3px 5px;
+    font-size: 0.8em;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transform: translateY(5px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    z-index: 5; /* Ensure it's above message content */
+}
+
+.message:hover .add-reaction-btn {
+    opacity: 1; /* Show on hover */
+    transform: translateY(0);
+}
+
+.add-reaction-btn:hover {
+    background-color: var(--accent-purple-light);
+}
+
+.message-reactions {
+    margin-top: 5px; /* Space between message text and reactions */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.reaction-emoji {
+    background-color: var(--accent-purple-light);
+    border: 1px solid var(--accent-purple-medium);
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 0.8em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.reaction-emoji.reacted-by-user { /* Style for reactions added by the current user */
+    background-color: var(--accent-purple-medium);
+    color: white;
+    border-color: var(--accent-purple-dark);
+}
+
+.reaction-emoji .count {
+    font-size: 0.9em;
+    margin-left: 4px;
+    color: var(--accent-purple-dark);
+    font-weight: 600;
+}
+.reaction-emoji.reacted-by-user .count {
+    color: white;
+}
+
+/* --- Emoji Reaction Bar --- */
+.emoji-reaction-bar {
+    position: absolute; /* Will be positioned by JS */
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    display: flex;
+    gap: 5px;
+    z-index: 100; /* Ensure it's above other message elements */
+}
+
+.emoji-reaction-bar-button {
+    background: none;
+    border: none;
+    padding: 5px 7px;
+    font-size: 1.2em; /* Make emojis a bit larger */
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.emoji-reaction-bar-button:hover {
+    background-color: var(--accent-purple-light);
+}
+
+
+/* --- Input Area --- */
+#input-area {
+    display: flex;
+    padding: 15px 25px;
+    background-color: var(--bg-secondary); /* Light purple/off-white */
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+#message-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color); /* Add border back */
+    border-radius: 20px; /* Make round */
+    margin-right: 10px;
+    font-size: 1rem;
+    background-color: var(--bg-primary); /* White background */
+    color: var(--text-primary); /* Dark text */
+}
+#message-input::placeholder {
+    color: #aaa; /* Light grey placeholder */
+}
+
+
+#send-btn {
+    padding: 10px 20px;
+    background-color: var(--accent-purple-dark); /* Dark purple */
+    color: white;
+    border: none;
+    border-radius: 20px; /* Make round */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+#send-btn:hover {
+    background-color: var(--accent-purple-medium); /* Medium purple */
+}
+
+/* --- Add Friend Section Styling --- */
+#add-friend-section {
+    padding: 15px 0;
+    margin-top: auto; /* Push to bottom */
+    border-top: 1px solid var(--border-color);
+}
+
+/* Heading style already defined */
+
+.add-friend-input-group {
+    display: flex;
+    gap: 5px;
+}
+
+#add-friend-username {
+    flex-grow: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--bg-primary); /* White background */
+    color: var(--text-primary); /* Dark text */
+    font-size: 0.9rem;
+}
+#add-friend-username::placeholder {
+    color: #aaa; /* Light grey placeholder */
+}
+
+#send-friend-request-btn {
+    padding: 8px 12px;
+    background-color: var(--accent-purple-dark); /* Dark purple */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+#send-friend-request-btn:hover {
+    background-color: var(--accent-purple-medium); /* Medium purple */
+}
+
+#friend-request-status {
+    font-size: 0.8em;
+    margin-top: 8px;
+    min-height: 1.2em;
+    color: var(--text-secondary); /* Purple secondary */
+    text-align: left;
+}
+
+/* Status message specific colors */
+#friend-request-status.success {
+    color: var(--success-color);
+}
+
+#friend-request-status.error {
+    color: var(--error-color);
+}
+
+/* --- Pending Friend Requests Section Styling --- */
+#pending-requests-section {
+    padding: 15px 0;
+    margin-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Heading style already defined */
+
+#pending-requests-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* max-height: 150px; */ /* REMOVED max-height */
+    /* overflow-y: auto; */ /* REMOVED scroll */
+}
+
+#pending-requests-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary); /* Dark text */
+}
+
+#pending-requests-list li:last-child {
+    border-bottom: none;
+}
+
+#pending-requests-list span { /* Username */
+    flex-grow: 1;
+    margin-right: 10px;
+    color: var(--text-primary); /* Dark text */
+    font-weight: 500;
+}
+
+#pending-requests-list button {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    margin-left: 5px;
+    font-weight: 600;
+    color: white; /* Default button text color */
+}
+
+#pending-requests-list .accept-btn {
+    background-color: var(--success-color); /* Green */
+}
+
+#pending-requests-list .accept-btn:hover {
+    opacity: 0.85;
+}
+
+#pending-requests-list .reject-btn {
+    background-color: var(--error-color); /* Red */
+}
+
+#pending-requests-list .reject-btn:hover {
+    opacity: 0.85;
+}
+
+/* --- Custom Scrollbars (WebKit) --- */
+/* For Chat Box */
+#chat-box::-webkit-scrollbar {
+    width: 6px; /* Thinner scrollbar */
+}
+
+#chat-box::-webkit-scrollbar-track {
+    background: transparent; /* Make track invisible, or use var(--accent-purple-light) for subtle track */
+    border-radius: 3px;
+}
+
+#chat-box::-webkit-scrollbar-thumb {
+    background-color: var(--accent-purple-medium); 
+    border-radius: 3px;
+    /* border: 1px solid var(--bg-secondary); /* Optional: border around thumb */
+}
+
+#chat-box::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-purple-dark); 
+}
+
+/* For Sidebar */
+#sidebar::-webkit-scrollbar {
+    width: 6px; /* Thinner scrollbar */
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: transparent; /* Make track invisible, or use var(--accent-purple-light) for subtle track */
+    border-radius: 3px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--accent-purple-medium); 
+    border-radius: 3px;
+    /* border: 1px solid var(--bg-primary); /* Optional: border around thumb */
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-purple-dark); 
+}
+
+/* Basic Scrollbar Styling for Firefox */
+#chat-box, #sidebar {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: var(--accent-purple-medium) transparent; /* thumb and track color */
+}
+
+
+/* --- Profile Status Icon & Text --- */
+#profile-status-container {
+    /* Styles already applied inline in HTML, but can be moved here if preferred */
+    /* display: flex; */
+    /* align-items: center; */
+    /* margin-top: -5px; */
+    /* margin-bottom: 10px; */
+}
+
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px; /* Spacing between dot and text */
+    background-color: #ccc; /* Default to grey (Offline) */
+    border: 1px solid rgba(0,0,0,0.1); /* Subtle border for definition */
+}
+
+/* Specific status colors */
+.status-dot.available { /* Renamed from .online */
+    background-color: #4CAF50; /* Green - Material Design */
+}
+.status-dot.busy {
+    background-color: #F44336; /* Red - Material Design */
+}
+.status-dot.idle { /* New status */
+    background-color: #FFEB3B; /* Yellow - Material Design */
+}
+.status-dot.brb { /* Renamed from .away, for 'Be Right Back' */
+    background-color: #FF9800; /* Orange - Material Design */
+}
+.status-dot.offline {
+    background-color: #9E9E9E; /* Grey - Material Design */
+}
+.status-dot.dnd { /* For 'Do Not Disturb' */
+    background-color: #303F9F; /* Indigo - Material Design */
+    /* Optionally, add a small inner element or pseudo-element for a minus icon if desired */
+    /* For simplicity, starting with just color */
+}
+
+#profile-status-text {
+    /* Styles already applied inline in HTML, can be moved here */
+    /* font-size: 0.85em; */
+    /* color: #555; */
+    /* margin-left: 5px; */ /* This was in HTML, but .status-dot has margin-right now */
+}
+
+
+/* --- Status Popup --- */
+.status-popup {
+    /* Position/display styles are inline in HTML for JS control */
+    min-width: 120px; /* Ensure popup has some width */
+}
+
+.status-popup a {
+    display: block; /* Make links take full width */
+    padding: 5px 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 0.9em;
+    border-radius: 3px;
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.status-popup a:hover {
+    background-color: var(--accent-purple-light);
+    color: var(--accent-purple-dark);
+}
+
+.status-popup a .status-dot {
+    vertical-align: middle; /* Align dot nicely with text */
+    margin-bottom: 2px; /* Slight adjustment */
+}
+
+/* --- User Profile Full Page View --- */
+#user-profile-view-container {
+    /* display: none; /* Controlled by JS, set in HTML */
+    /* position: fixed; */ /* Set in HTML */
+    /* top: 0; left: 0; width: 100%; height: 100%; */ /* Set in HTML */
+    /* background-color: rgba(0,0,0,0.8); */ /* Set in HTML, consider a theme variable if needed */
+    /* z-index: 1000; */ /* Set in HTML */
+    display: flex; /* Already set in HTML, but good to ensure */
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px); /* Smooth blur effect for background */
+}
+
+#user-profile-content {
+    /* background-color: #fff; */ /* Set in HTML, use var(--bg-primary) */
+    background-color: var(--bg-primary);
+    /* padding: 30px; */ /* Set in HTML */
+    /* border-radius: 8px; */ /* Set in HTML */
+    /* box-shadow: 0 4px 15px rgba(0,0,0,0.2); */ /* Set in HTML */
+    /* width: 90%; max-width: 500px; */ /* Set in HTML */
+    /* text-align: center; */ /* Set in HTML */
+    /* position: relative; */ /* Set in HTML */
+    color: var(--text-primary);
+    animation: fadeInProfile 0.3s ease-out;
+}
+
+@keyframes fadeInProfile {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#close-profile-view-btn {
+    /* position: absolute; top: 15px; right: 15px; */ /* Set in HTML */
+    /* background: none; border: none; */ /* Set in HTML */
+    /* font-size: 1.5em; */ /* Set in HTML */
+    /* cursor: pointer; */ /* Set in HTML */
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+#close-profile-view-btn:hover {
+    color: var(--accent-purple-dark);
+}
+
+#profile-view-avatar {
+    /* width: 120px; height: 120px; border-radius: 50%; */ /* Set in HTML */
+    /* margin-bottom: 20px; object-fit: cover; */ /* Set in HTML */
+    /* border: 3px solid #eee; */ /* Set in HTML, use var(--border-color) */
+    border: 3px solid var(--border-color);
+}
+
+#profile-view-username {
+    /* margin-bottom: 10px; */ /* Set in HTML */
+    color: var(--accent-purple-dark);
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+#profile-view-status {
+    /* margin-bottom: 15px; font-style: italic; */ /* Set in HTML */
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+#profile-view-status .status-dot {
+    /* Uses existing .status-dot styles */
+    vertical-align: middle;
+}
+
+#profile-view-description-area {
+    margin-top: 20px;
+    text-align: left; /* Align content within this area to the left */
+}
+
+#profile-view-description-area h4 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--accent-purple-light);
+    padding-bottom: 5px;
+}
+
+#profile-view-description-text {
+    /* margin-bottom: 20px; white-space: pre-wrap; min-height: 50px; */ /* Set in HTML */
+    /* background-color: #f9f9f9; */ /* Set in HTML, use var(--bg-secondary) */
+    background-color: var(--bg-secondary);
+    /* padding: 10px; border-radius: 4px; */ /* Set in HTML */
+    /* text-align: left; */ /* Set in HTML */
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+#profile-edit-description-input {
+    /* display: none; width: calc(100% - 22px); min-height: 80px; */ /* Set in HTML */
+    /* margin-bottom: 10px; padding: 10px; border-radius: 4px; */ /* Set in HTML */
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+#profile-edit-description-input:focus {
+    outline: none;
+    border-color: var(--accent-purple-medium);
+    box-shadow: 0 0 0 2px var(--accent-purple-light);
+}
+
+
+#edit-description-btn,
+#save-description-btn {
+    /* padding: 8px 15px; color: white; border: none; border-radius: 4px; cursor: pointer; */ /* Base styles in HTML */
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+}
+
+#edit-description-btn {
+    /* background-color: #5cb85c; */ /* Set in HTML, use var(--success-color) */
+    background-color: var(--success-color);
+}
+#edit-description-btn:hover {
+    opacity: 0.85;
+}
+
+#save-description-btn {
+    /* background-color: #007bff; */ /* Set in HTML, use var(--accent-purple-dark) */
+    background-color: var(--accent-purple-dark);
+    /* margin-left: 10px; */ /* Set in HTML */
+}
+#save-description-btn:hover {
+    background-color: var(--accent-purple-medium);
+}
